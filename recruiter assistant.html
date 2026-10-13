@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RecruiterAI — Intelligent Recruitment Assistant</title>
+<style>
+:root{--bg:#f5f6fb;--card:#fff;--ink:#1c2033;--mut:#6b7190;--line:#e6e8f2;--blue:#3b5bfd;--vio:#7c4dff;--grad:linear-gradient(135deg,#3b5bfd,#7c4dff)}
+*{box-sizing:border-box}body{margin:0;font:14px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select,textarea{font:inherit;color:inherit}
+.app{display:flex;min-height:100vh}
+aside{width:232px;background:#fff;border-right:1px solid var(--line);padding:18px 12px;position:sticky;top:0;height:100vh;flex-shrink:0}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;padding:0 8px 18px}
+.logo i{width:32px;height:32px;border-radius:9px;background:var(--grad);display:grid;place-items:center;color:#fff;font-style:normal;font-size:15px}
+nav button{display:flex;width:100%;gap:10px;align-items:center;border:0;background:none;padding:9px 12px;border-radius:10px;cursor:pointer;color:var(--mut);text-align:left;margin-bottom:2px}
+nav button:hover{background:#f1f3fb}nav button.on{background:#eceeff;color:var(--blue);font-weight:600}
+main{flex:1;min-width:0;padding:22px 28px 60px}
+.top{display:flex;gap:12px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
+.top h1{font-size:22px;margin:0;flex:1}
+input,select,textarea{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;outline:none}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+textarea{width:100%;resize:vertical}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px}
+.card h3{margin:0 0 12px;font-size:15px}
+.grid{display:grid;gap:14px}.g5{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.stat b{display:block;font-size:26px}.stat span{color:var(--mut)}
+.btn{background:var(--grad);color:#fff;border:0;border-radius:10px;padding:9px 16px;cursor:pointer;font-weight:600}
+.btn.s{background:#eceeff;color:var(--blue)}.btn.sm{padding:5px 10px;font-size:12px}
+table{width:100%;border-collapse:collapse}th{text-align:left;color:var(--mut);font-weight:500;font-size:12px}
+th,td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tw{overflow-x:auto}
+.chip{display:inline-block;background:#eef0ff;color:#3446c9;border-radius:20px;padding:2px 9px;font-size:12px;margin:2px 3px 2px 0}
+.chip.g{background:#e3f8ec;color:#137a45}.chip.r{background:#fde8e8;color:#b42318}
+.badge{border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600;white-space:nowrap}
+.b-Shortlisted{background:#e3f8ec;color:#137a45}.b-Review{background:#fff4d6;color:#8a6100}.b-Rejected{background:#fde8e8;color:#b42318}.b-Interview{background:#e3efff;color:#1d56b8}
+.ring{--p:80;width:56px;height:56px;border-radius:50%;background:conic-gradient(var(--blue) calc(var(--p)*1%),#e8eaf5 0);display:grid;place-items:center;flex-shrink:0}
+.ring span{width:44px;height:44px;border-radius:50%;background:#fff;display:grid;place-items:center;font-weight:700;font-size:13px}
+.ring.l{width:110px;height:110px}.ring.l span{width:88px;height:88px;font-size:24px}
+.bar{height:8px;background:#e8eaf5;border-radius:8px;overflow:hidden}.bar i{display:block;height:100%;background:var(--grad);border-radius:8px}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.row.sp{justify-content:space-between}
+.mut{color:var(--mut)}.sm{font-size:12px}
+.lbl{display:grid;grid-template-columns:110px 1fr 44px;gap:10px;align-items:center;margin:8px 0}
+.chat{display:flex;flex-direction:column;height:calc(100vh - 150px);min-height:420px}
+.msgs{flex:1;overflow:auto;display:flex;flex-direction:column;gap:10px;padding:4px}
+.m{max-width:78%;padding:10px 14px;border-radius:14px;white-space:pre-wrap}
+.m.u{align-self:flex-end;background:var(--grad);color:#fff;border-bottom-right-radius:4px}
+.m.a{align-self:flex-start;background:#f1f3fb;border-bottom-left-radius:4px}
+.src{display:block;margin-top:6px;font-size:11px;color:var(--mut)}
+.sug{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.sug button{border:1px solid var(--line);background:#fff;border-radius:20px;padding:5px 11px;cursor:pointer;font-size:12px}
+.note{background:#f3f0ff;border:1px solid #ddd5ff;border-radius:12px;padding:10px 14px;font-size:12px;color:#4b3aa8}
+.toast{position:fixed;bottom:20px;right:20px;background:#1c2033;color:#fff;padding:10px 16px;border-radius:10px;z-index:9}
+ul.q{margin:0;padding-left:18px}ul.q li{margin:6px 0}
+.vbar{display:flex;align-items:flex-end;gap:8px;height:130px}.vbar div{flex:1;text-align:center;font-size:11px}.vbar i{display:block;background:var(--grad);border-radius:6px 6px 0 0;margin-bottom:4px}
+@media(max-width:800px){.app{flex-direction:column}aside{width:100%;height:auto;position:static;padding:10px}nav{display:flex;overflow-x:auto;gap:4px}nav button{white-space:nowrap;width:auto}.logo{padding-bottom:8px}main{padding:16px}.m{max-width:92%}}
+@media print{aside,.noprint{display:none}}
+</style></head>
+<body><div class="app"><aside><div class="logo"><i>R</i>RecruiterAI</div><nav id="nav"></nav></aside><main id="main"></main></div>
+<script>
+const V=["python","sql","machine learning","git","apis","docker","aws","fastapi","langchain","kubernetes","rag","pytorch","tensorflow","pandas","tableau","power bi","java","react","javascript","nlp","statistics","excel","flask","postgresql","spark","ci/cd","mlops","chromadb"];
+const T=s=>s.replace(/\b\w/g,c=>c.toUpperCase()).replace(/\bAws\b/,"AWS").replace("Apis","APIs").replace("Sql","SQL").replace("Rag","RAG").replace("Nlp","NLP").replace("Ci/cd","CI/CD").replace("Fastapi","FastAPI").replace("Langchain","LangChain").replace("Mlops","MLOps").replace("Postgresql","PostgreSQL").replace("Chromadb","ChromaDB").replace("Power Bi","Power BI").replace("Pytorch","PyTorch").replace("Tensorflow","TensorFlow");
+let C=[
+{n:"Ayesha Khan",role:"AI Developer",exp:3,edu:"Masters",deg:"MSc Artificial Intelligence",loc:"London",st:"Interview",email:"ayesha.khan@example.com",skills:["python","machine learning","sql","git","fastapi","apis","rag","langchain","nlp","pytorch"],proj:["Built a RAG assistant with LangChain and ChromaDB over 2,000 HR policy PDFs, exposed through a FastAPI service","Fine-tuned an NLP classifier in PyTorch for support ticket routing (F1 0.89)"],cert:["Google Cloud ML Engineer"]},
+{n:"Daniel Moore",role:"Data Analyst",exp:2,edu:"Bachelors",deg:"BSc Statistics",loc:"Manchester",st:"Review",email:"d.moore@example.com",skills:["sql","python","tableau","excel","statistics","pandas","power bi"],proj:["Built a Tableau sales dashboard used by 40 regional managers","Churn analysis with pandas and SQL that cut churn 6%"],cert:["Tableau Desktop Specialist"]},
+{n:"Priya Sharma",role:"Python Developer",exp:4,edu:"Bachelors",deg:"BTech Computer Science",loc:"Remote",st:"Shortlisted",email:"priya.s@example.com",skills:["python","flask","fastapi","postgresql","docker","git","apis","aws","ci/cd","sql"],proj:["Designed REST APIs in FastAPI serving 1M requests/day on AWS ECS","Containerised legacy Flask services with Docker and added CI/CD pipelines"],cert:["AWS Developer Associate"]},
+{n:"Marcus Lee",role:"ML Engineer",exp:5,edu:"PhD",deg:"PhD Machine Learning",loc:"Berlin",st:"Shortlisted",email:"marcus.lee@example.com",skills:["python","machine learning","pytorch","tensorflow","docker","kubernetes","aws","mlops","git","sql","spark","apis"],proj:["Deployed a recommendation model on Kubernetes with MLOps monitoring, 35% CTR lift","Distributed training pipeline on Spark and AWS"],cert:["CKAD"]},
+{n:"Sofia Alvarez",role:"Software Engineer",exp:1,edu:"Bachelors",deg:"BSc Software Engineering",loc:"Madrid",st:"Rejected",email:"sofia.a@example.com",skills:["java","javascript","react","git","sql","apis"],proj:["React task manager with a Java Spring REST backend","Open-source contributions to a JavaScript charting library"],cert:[]}];
+C.forEach(c=>c.id=c.n);
+let JD={title:"AI Developer",req:["python","sql","machine learning","git","apis"],pref:["docker","aws","fastapi","langchain"],exp:2,edu:"Bachelors",loc:"London / Remote",
+text:"AI Developer\nWe are looking for an AI Developer with 2+ years of experience. Bachelor's degree required. Location: London or Remote.\nRequired: Python, SQL, Machine Learning, Git, APIs. Strong communication skills.\nPreferred: Docker, AWS, FastAPI, LangChain."};
+let sel=C[0].n,view="dash",chat=[{r:"a",t:"Hi, I'm RecruiterAI. I answer only from the uploaded resumes and the active job description. Try one of the suggestions below."}];
+const E={Bachelors:.85,Masters:.95,PhD:1};
+const sc=c=>{const f=a=>a.length?a.filter(s=>c.skills.includes(s)).length/a.length:1,pt=c.proj.join(" ").toLowerCase(),all=[...JD.req,...JD.pref];
+const tech=f(JD.req),tools=f(JD.pref),exp=Math.min(1,c.exp/JD.exp),edu=E[c.edu]||.7,pr=Math.min(1,all.filter(s=>pt.includes(s)).length/4+.3*(c.proj.length>0));
+const ov=.4*tech+.2*exp+.1*edu+.15*pr+.15*tools,p=x=>Math.round(x*100);
+return{ov:p(ov),tech:p(tech),exp:p(exp),edu:p(edu),proj:p(pr),tools:p(tools),have:all.filter(s=>c.skills.includes(s)),miss:all.filter(s=>!c.skills.includes(s)),rec:ov>=.8?"Strong Match":ov>=.65?"Potential Match":"Weak Match"}};
+const by=n=>C.find(c=>c.n===n),$=s=>document.querySelector(s),chips=(a,k="")=>a.map(s=>`<span class="chip ${k}">${T(s)}</span>`).join("")||'<span class="mut">None</span>';
+const ST={Shortlisted:"🟢 Shortlisted",Review:"🟡 Under Review",Rejected:"🔴 Rejected",Interview:"🔵 Interview Scheduled"};
+const badge=s=>`<span class="badge b-${s}">${ST[s]}</span>`,ring=(p,l)=>`<div class="ring ${l?"l":""}" style="--p:${p}"><span>${p}%</span></div>`;
+const toast=m=>{const d=document.createElement("div");d.className="toast";d.textContent=m;document.body.append(d);setTimeout(()=>d.remove(),2600)};
+const NAV=[["dash","🏠","Dashboard"],["cand","👥","Candidate Analysis"],["jd","📄","Job Description Analyzer"],["match","🎯","Resume Matcher"],["int","❓","Interview Questions"],["sum","📝","Candidate Summary"],["chat","💬","Chat Assistant"],["set","⚙️","Settings"]];
+const pick=()=>`<select onchange="sel=this.value;go(view)">${C.map(c=>`<option ${c.n===sel?"selected":""}>${c.n}</option>`).join("")}</select>`;
+function go(v){view=v;$("#nav").innerHTML=NAV.map(n=>`<button class="${n[0]==v?"on":""}" onclick="go('${n[0]}')"><span>${n[1]}</span>${n[2]}</button>`).join("");
+const t=NAV.find(n=>n[0]==v)[2];$("#main").innerHTML=`<div class="top"><h1>${t}</h1>${["match","int","sum"].includes(v)?pick():""}</div>`+VW[v]();if(VW[v+"_i"])VW[v+"_i"]();scrollTo(0,0)}
+function table(list,act=true){return list.length?`<div class="tw"><table><tr><th>Candidate</th><th>Role</th><th>Match</th><th>Experience</th><th>Skills</th><th>Status</th>${act?"<th>Action</th>":""}</tr>${list.map(c=>`<tr><td><b>${c.n}</b><br><span class="mut sm">${c.loc}</span></td><td>${c.role}</td><td>${ring(sc(c).ov)}</td><td>${c.exp} yr${c.exp>1?"s":""}</td><td>${chips(c.skills.slice(0,3))}</td><td>${badge(c.st)}</td>${act?`<td><button class="btn s sm" onclick="sel='${c.n}';go('sum')">View</button></td>`:""}</tr>`).join("")}</table></div>`:'<p class="mut">No matching candidates. Try loosening a filter.</p>'}
+const avg=a=>a.length?Math.round(a.reduce((x,y)=>x+y,0)/a.length):0;
+function bars(o,max){const m=max||Math.max(...Object.values(o),1);return`<div class="vbar">${Object.entries(o).map(([k,v])=>`<div><i style="height:${v/m*100}px"></i>${k}<br><b>${v}</b></div>`).join("")}</div>`}
+const cnt=a=>a.reduce((o,k)=>(o[k]=(o[k]||0)+1,o),{});
+const VW={
+dash(){const s=C.map(sc),sh=C.filter(c=>c.st=="Shortlisted").length,iv=C.filter(c=>c.st=="Interview").length;
+const sk=Object.entries(cnt(C.flatMap(c=>c.skills))).sort((a,b)=>b[1]-a[1]).slice(0,6),dem=Object.entries(cnt([...JD.req,...JD.pref])).slice(0,6);
+return`<div class="grid g5">${[["Total Candidates",C.length],["Shortlisted",sh],["Interviews Pending",iv],["Avg Match Score",avg(s.map(x=>x.ov))+"%"],["Open Positions",5]].map(x=>`<div class="card stat"><b>${x[1]}</b><span>${x[0]}</span></div>`).join("")}</div>
+<div class="card"><h3>Recent candidates</h3>${table(C)}</div>
+<div class="grid g2"><div class="card"><h3>Most common candidate skills</h3>${bars(Object.fromEntries(sk.map(([k,v])=>[T(k),v])))}</div>
+<div class="card"><h3>Pipeline</h3>${bars(cnt(C.map(c=>ST[c.st].slice(3).split(" ")[0])))}<p class="mut sm">Shortlist rate ${Math.round(sh/C.length*100)}% · Interview conversion ${Math.round((iv+sh)/C.length*100)}%</p></div></div>
+<div class="card"><h3>Match score by candidate</h3>${C.map((c,i)=>`<div class="lbl"><span>${c.n.split(" ")[0]}</span><div class="bar"><i style="width:${s[i].ov}%"></i></div><b>${s[i].ov}%</b></div>`).join("")}</div>`},
+cand(){return`<div class="card"><h3>Upload resume</h3><div class="row"><input type="file" id="f" accept=".txt,.pdf,.docx"><button class="btn" onclick="up()">Extract details</button></div>
+<p class="mut sm">This browser demo reads .txt files. PDF and DOCX parsing runs in the Python backend (PyPDF / python-docx).</p><div id="ext"></div></div>
+<div class="card"><h3>Search and filter</h3><div class="row"><input id="q" placeholder="Search name or skill" oninput="flt()"><select id="fs" onchange="flt()"><option value="">Any status</option>${Object.keys(ST).map(k=>`<option value="${k}">${ST[k].slice(3)}</option>`).join("")}</select>
+<select id="fx" onchange="flt()"><option value="">Any experience</option><option value="0-1">0–1 yrs</option><option value="1-3">1–3 yrs</option><option value="3-9">3+ yrs</option></select>
+<select id="fm" onchange="flt()"><option value="0">Any match</option><option value="60">Match &gt; 60%</option><option value="80">Match &gt; 80%</option></select>
+<select id="fr" onchange="flt()"><option value="">Any role</option>${[...new Set(C.map(c=>c.role))].map(r=>`<option>${r}</option>`).join("")}</select></div></div>
+<div class="card" id="cl"></div>`},
+cand_i(){flt()},
+jd(){return`<div class="card"><h3>Paste a job description</h3><textarea id="jt" rows="7">${JD.text}</textarea><div class="row" style="margin-top:10px"><button class="btn" onclick="aj()">Analyze</button><button class="btn s" onclick="document.getElementById('jf').click()">Upload .txt</button><input type="file" id="jf" accept=".txt" hidden onchange="jfl(this)"></div></div><div id="jr">${jr()}</div>`},
+match(){const c=by(sel),s=sc(c),b=[["Technical skills",s.tech],["Experience",s.exp],["Education",s.edu],["Projects",s.proj],["Tools",s.tools]];
+return`<div class="card"><div class="row"><div>${ring(s.ov,1)}</div><div><h3 style="margin:0">${c.n} → ${JD.title}</h3><p class="mut" style="margin:4px 0 8px">Overall match ${s.ov}%</p><span class="badge ${s.ov>=80?"b-Shortlisted":s.ov>=65?"b-Review":"b-Rejected"}">${s.rec}</span></div></div></div>
+<div class="grid g2"><div class="card"><h3>Breakdown</h3>${b.map(x=>`<div class="lbl"><span>${x[0]}</span><div class="bar"><i style="width:${x[1]}%"></i></div><b>${x[1]}%</b></div>`).join("")}</div>
+<div class="card"><h3>Matching skills</h3>${chips(s.have,"g")}<h3 style="margin-top:14px">Missing skills</h3>${chips(s.miss,"r")}</div></div>
+<div class="card"><h3>Why this score</h3><p>${why(c,s)}</p></div>
+<div class="card"><h3>Compare candidates</h3>${cmp(C.map(x=>x.n))}<div class="row noprint" style="margin-top:12px"><button class="btn s" onclick="csv()">Export CSV</button><button class="btn s" onclick="pdf()">Export PDF</button></div></div>`},
+int(){const c=by(sel),Q=qs(c);return`<div class="grid g2">${Object.entries(Q).map(([k,v])=>`<div class="card"><h3>${k} (5)</h3><ul class="q">${v.map(q=>`<li>${q}</li>`).join("")}</ul></div>`).join("")}</div><div class="row noprint"><button class="btn s" onclick="csv(1)">Export CSV</button><button class="btn s" onclick="pdf(1)">Export PDF</button></div>`},
+sum(){const c=by(sel),s=sc(c);return`<div class="card"><div class="row sp"><div><h3 style="margin:0">${c.n}</h3><span class="mut">${c.role} · ${c.loc} · ${c.email}</span></div>${badge(c.st)}</div></div>
+<div class="card"><h3>Candidate overview</h3><p>${c.n} has ${c.exp} year${c.exp>1?"s":""} of experience and holds a ${c.deg}. Documented skills include ${c.skills.slice(0,5).map(T).join(", ")}.</p></div>
+<div class="grid g2"><div class="card"><h3>Key strengths</h3>${chips(s.have,"g")}</div><div class="card"><h3>Skill gaps</h3>${chips(s.miss,"r")}</div></div>
+<div class="card"><h3>Relevant projects</h3><ul class="q">${c.proj.map(p=>`<li>${p}</li>`).join("")}</ul><h3 style="margin-top:14px">Certifications</h3>${c.cert.length?c.cert.join(", "):'<span class="mut">None listed in the resume.</span>'}</div>
+<div class="card"><h3>Recruiter recommendation: ${s.rec} (${s.ov}%)</h3><p>${why(c,s)}</p><p class="mut sm">Based only on job-relevant evidence. Protected characteristics are never used.</p><div class="row noprint"><button class="btn s" onclick="csv()">Export CSV</button><button class="btn s" onclick="pdf(2)">Export PDF</button></div></div>`},
+chat(){return`<div class="card chat"><div class="msgs" id="ms"></div><div class="sug">${["Show candidates with Python and SQL","Who has the strongest machine learning experience?","Which candidates have experience with FastAPI?","Compare Ayesha Khan and Priya Sharma","What skills are missing for Marcus Lee?","Generate interview questions for Ayesha Khan","Does Daniel Moore have Kubernetes experience?"].map(q=>`<button onclick="ask('${q}')">${q}</button>`).join("")}</div><div class="row"><input id="ci" style="flex:1" placeholder="Ask about candidates…" onkeydown="if(event.key=='Enter')ask()"><button class="btn" onclick="ask()">Send</button></div></div>`},
+chat_i(){rm()},
+set(){return`<div class="card"><h3>LLM provider</h3><div class="row"><select><option>Gemini</option><option>OpenAI</option><option>Groq</option></select><input type="password" placeholder="API key (stored only in your browser session)"><button class="btn" onclick="toast('Demo mode: answers come from the built-in retriever')">Save</button></div></div>
+<div class="card"><h3>AI safety</h3><ul class="q"><li>Never invents candidate information; says so when it is missing.</li><li>Ignores protected characteristics (age, gender, ethnicity, religion, etc.).</li><li>Recommendations cite resume and job description evidence only.</li><li>Candidate data stays in this browser. Nothing is uploaded.</li></ul></div>
+<div class="card"><h3>Demo data</h3><button class="btn s" onclick="location.reload()">Reset sample data</button></div>`}};
+function why(c,s){const m=s.have.length,t=JD.req.length+JD.pref.length;return`${c.n} matches ${m} of ${t} requested skills (${s.tech}% of required, ${s.tools}% of preferred). Experience is ${c.exp} yr vs ${JD.exp}+ requested, and education is a ${c.edu==="Bachelors"?"Bachelor's":c.edu} level.${s.miss.length?" Missing from the resume: "+s.miss.map(T).join(", ")+".":" No requested skills are missing."}`}
+function cmp(names){const r=names.map(by).map(c=>({c,s:sc(c)})).sort((a,b)=>b.s.ov-a.s.ov);return`<div class="tw"><table><tr><th>Candidate</th><th>Match</th><th>Experience</th><th>Skills</th><th>Recommendation</th></tr>${r.map(({c,s})=>`<tr><td><b>${c.n}</b></td><td>${s.ov}%</td><td>${c.exp} yrs</td><td>${s.tech>=80?"Excellent":s.tech>=60?"Very good":"Good"}</td><td>${s.ov>=80?"Shortlist":"Review"}</td></tr>`).join("")}</table></div>`}
+function qs(c){const s=sc(c),a=c.skills.filter(x=>!JD.req.includes(x)).slice(0,2).map(T),k=JD.req.slice(0,3).map(T),p=c.proj,g=s.miss.slice(0,3).map(T);
+return{Technical:[`Walk through how you use ${T(c.skills[0])} in production and the trade-offs you weigh.`,`How would you optimise a slow ${T(c.skills.includes("sql")?"sql":c.skills[1])} workload?`,`Explain how you design and version ${T("apis")} for the ${JD.title} role.`,`How do you evaluate a ${T("machine learning")} model before release?`,`You have no ${g[0]||"gap"} on your resume. How would you ramp up in the first 30 days?`],
+"Project-Based":[`Tell me about: "${p[0].slice(0,80)}…". What was your specific contribution?`,`In "${(p[1]||p[0]).slice(0,60)}…", what would you do differently today?`,`Explain how you implemented ${c.skills.includes("rag")?"RAG in your project and why you selected your vector database":T(c.skills[0])+" in your main project"}.`,`How did you measure success on your most recent project?`,`Which part of your portfolio best shows ${k[0]} and ${k[1]} skills?`],
+Behavioral:["Describe a time you disagreed with a teammate on a technical decision.","Tell me about a deadline you nearly missed and how you handled it.","Describe feedback that changed how you work.","How do you explain technical results to non-technical stakeholders?","Tell me about a time you learned a new tool quickly."],
+Situational:["A model's accuracy drops after release. What are your first three steps?","A stakeholder asks for a feature that conflicts with the roadmap. What do you do?","You find a data quality issue the night before a demo. What now?","Two urgent tasks arrive at once. How do you prioritise?",`The team adopts ${g[1]||g[0]||"a new tool"} next sprint and you have never used it. How do you contribute?`]}}
+function flt(){const q=($("#q").value||"").toLowerCase(),st=$("#fs").value,x=$("#fx").value,m=+$("#fm").value,r=$("#fr").value;
+const l=C.filter(c=>(!q||(c.n+c.skills.join(" ")).toLowerCase().includes(q))&&(!st||c.st==st)&&(!r||c.role==r)&&sc(c).ov>m&&(!x||(c.exp>=+x.split("-")[0]&&c.exp<=+x.split("-")[1])));$("#cl").innerHTML=`<h3>${l.length} candidate${l.length==1?"":"s"}</h3>`+table(l)}
+function up(){const f=$("#f").files[0],o=$("#ext");if(!f)return o.innerHTML='<p class="chip r">Choose a file first.</p>';
+const ex=f.name.split(".").pop().toLowerCase();if(!["txt","pdf","docx"].includes(ex))return o.innerHTML='<p class="chip r">Unsupported format. Upload a PDF, DOCX or TXT file.</p>';
+if(ex!="txt")return o.innerHTML='<p class="chip r">This web demo parses .txt only. Convert the file to TXT, or use the Python backend for PDF/DOCX.</p>';
+const r=new FileReader();r.onload=()=>{const t=r.result.trim();if(!t)return o.innerHTML='<p class="chip r">The resume is empty.</p>';
+const l=t.toLowerCase(),sk=V.filter(s=>l.includes(s)),em=(t.match(/[\w.+-]+@[\w-]+\.[\w.]+/)||[])[0],ph=(t.match(/\+?\d[\d\s().-]{8,}\d/)||[])[0],yr=(t.match(/(\d+)\+?\s*years?/i)||[])[1],ed=(t.match(/(PhD|Master'?s?|MSc|Bachelor'?s?|BSc|BTech)[^\n]*/i)||[])[0],nm=t.split("\n")[0].slice(0,40);
+const c={n:nm,role:"Unassigned",exp:+yr||0,edu:/phd/i.test(ed)?"PhD":/master|msc/i.test(ed)?"Masters":"Bachelors",deg:ed||"Not found",loc:"Not found",st:"Review",email:em||"Not found",skills:sk,proj:t.split("\n").filter(x=>/project|built|developed/i.test(x)).slice(0,3),cert:[]};
+if(!c.proj.length)c.proj=["No projects found in resume"];c.id=c.n;C.push(c);sel=c.n;
+o.innerHTML=`<div class="grid g2" style="margin-top:12px">${[["Name",nm],["Email",em||"I couldn't find this information in the uploaded resume."],["Phone",ph||"I couldn't find this information in the uploaded resume."],["Education",ed||"I couldn't find this information in the uploaded resume."],["Years of experience",yr||"I couldn't find this information in the uploaded resume."]].map(x=>`<div class="card" style="margin:0"><b>${x[0]}</b><br>${x[1]}</div>`).join("")}<div class="card" style="margin:0"><b>Skills / technologies</b><br>${chips(sk)}</div></div><p class="chip g">Added to candidates — match score ${sc(c).ov}%</p>`;flt()};r.readAsText(f)}
+function jr(){return`<div class="grid g2"><div class="card"><h3>Required skills</h3>${chips(JD.req)}<h3 style="margin-top:14px">Preferred skills</h3>${chips(JD.pref,"g")}</div><div class="card"><h3>Other requirements</h3><p>Education: ${JD.edu} degree<br>Experience: ${JD.exp}+ years<br>Location: ${JD.loc}<br>Communication skills: ${/communicat/i.test(JD.text)?"Required":"Not mentioned"}</p><button class="btn s" onclick="go('match')">Match candidates</button></div></div>`}
+function aj(){const t=$("#jt").value.trim();if(!t)return toast("Paste a job description first");const l=t.toLowerCase(),i=l.search(/preferred|nice to have|bonus/),a=i<0?l:l.slice(0,i),b=i<0?"":l.slice(i);
+const req=V.filter(s=>a.includes(s)),pref=V.filter(s=>b.includes(s)&&!req.includes(s));if(!req.length&&!pref.length)return toast("No known skills found. Try listing skills explicitly.");
+JD={title:t.split("\n")[0].slice(0,40),req,pref,exp:+((l.match(/(\d+)\+?\s*years?/)||[])[1]||1),edu:/phd/.test(l)?"PhD":/master/.test(l)?"Masters":"Bachelors",loc:(t.match(/location:?\s*([^\n.]+)/i)||[])[1]||"Not specified",text:t};$("#jr").innerHTML=jr();toast("Job description analyzed")}
+function jfl(i){const r=new FileReader();r.onload=()=>{$("#jt").value=r.result;aj()};i.files[0]&&r.readAsText(i.files[0])}
+function dl(n,t,m){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:m}));a.download=n;a.click()}
+function csv(q){const rows=[["Candidate","Role","Match %","Experience","Missing skills","Recommendation"],...C.map(c=>{const s=sc(c);return[c.n,c.role,s.ov,c.exp,s.miss.map(T).join("; "),s.rec]})];
+if(q){const Q=qs(by(sel));Object.entries(Q).forEach(([k,v])=>v.forEach(x=>rows.push([sel,k,x])))}dl("recruiterai-report.csv",rows.map(r=>r.map(x=>`"${String(x).replace(/"/g,'""')}"`).join(",")).join("\n"),"text/csv")}
+function pdf(m){const c=by(sel),s=sc(c);let h=`<h1>RecruiterAI report</h1><h2>${c.n} → ${JD.title}</h2><p>Match ${s.ov}% · ${s.rec}</p><p>${why(c,s)}</p>`;
+if(m==1)Object.entries(qs(c)).forEach(([k,v])=>h+=`<h3>${k}</h3><ol>${v.map(x=>`<li>${x}</li>`).join("")}</ol>`);else h+=cmp(C.map(x=>x.n));
+const w=open("","_blank");if(!w)return toast("Allow pop-ups to export PDF");w.document.write(`<body style="font-family:sans-serif;padding:24px">${h}</body>`);w.document.close();w.print()}
+function rm(){const m=$("#ms");if(!m)return;m.innerHTML=chat.map(x=>`<div class="m ${x.r}">${x.t}${x.s?`<span class="src">Sources: ${x.s}</span>`:""}</div>`).join("");m.scrollTop=m.scrollHeight}
+function ask(q){const i=$("#ci");q=q||i.value.trim();if(!q)return toast("Type a question first");if(i)i.value="";chat.push({r:"u",t:q});const a=bot(q);chat.push({r:"a",...a});rm()}
+function bot(q){const l=q.toLowerCase(),nm=C.filter(c=>l.includes(c.n.toLowerCase())||l.includes(c.n.split(" ")[0].toLowerCase())),sk=V.filter(s=>new RegExp("\\b"+s.replace("/","\\/")+"\\b").test(l)||(s=="apis"&&/\bapi\b/.test(l)));
+if(/age|gender|religion|ethnic|race|married|pregnan|nationality/.test(l))return{t:"I can't use protected characteristics to evaluate candidates. I can compare them on job-relevant skills, experience and projects."};
+if(/interview/.test(l)&&nm[0]){const Q=qs(nm[0]);return{t:`Here are 20 questions for ${nm[0].n}. Samples:\n• ${Q.Technical[0]}\n• ${Q["Project-Based"][0]}\n• ${Q.Behavioral[0]}\n• ${Q.Situational[0]}\nOpen the Interview Questions tab for the full list.`,s:nm[0].n+" resume, active JD"}}
+if(/compar/.test(l)&&nm.length>1)return{t:nm.map(c=>{const s=sc(c);return`${c.n}: ${s.ov}% (${s.rec}). Has ${s.have.map(T).join(", ")}. Missing ${s.miss.map(T).join(", ")||"nothing"}.`}).join("\n\n"),s:nm.map(c=>c.n+" resume").join(", ")};
+if(/summar/.test(l)&&nm[0]){const c=nm[0],s=sc(c);return{t:`${c.n} (${c.role}): ${c.exp} yrs, ${c.deg}. Match ${s.ov}%, ${s.rec}. Evidence: ${c.proj[0]}.`,s:c.n+" resume"}}
+if(/missing|gap/.test(l)&&nm[0]){const s=sc(nm[0]);return{t:s.miss.length?`${nm[0].n} is missing: ${s.miss.map(T).join(", ")}.`:`${nm[0].n} covers every requested skill.`,s:nm[0].n+" resume, active JD"}}
+if(sk.length&&/strongest|best|top/.test(l)){const r=C.map(c=>({c,n:sk.filter(s=>c.skills.includes(s)).length+c.proj.join(" ").toLowerCase().split(sk[0]).length*.1+c.exp*.01})).sort((a,b)=>b.n-a.n)[0].c;return{t:`${r.n} has the strongest documented ${sk.map(T).join("/")} background: ${r.exp} yrs, skills listed (${r.skills.filter(s=>sk.includes(s)).map(T).join(", ")||"none"}). Project: ${r.proj[0]}.`,s:r.n+" resume"}}
+if(/strongest|best/.test(l)){const r=[...C].sort((a,b)=>sc(b).ov-sc(a).ov)[0];return{t:`${r.n} has the highest match for ${JD.title}: ${sc(r).ov}% (${sc(r).rec}).`,s:r.n+" resume, active JD"}}
+if(sk.length&&nm[0]){const c=nm[0],h=sk.filter(s=>c.skills.includes(s));return{t:h.length?`Yes, ${c.n}'s resume lists ${h.map(T).join(", ")}.`:`I couldn't find ${sk.map(T).join(", ")} in ${c.n}'s uploaded resume.`,s:c.n+" resume"}}
+if(sk.length){const r=C.filter(c=>sk.every(s=>c.skills.includes(s)));return{t:r.length?`${r.length} candidate${r.length>1?"s":""} match${r.length>1?"":"es"} ${sk.map(T).join(" + ")}: ${r.map(c=>c.n).join(", ")}.`:`No candidates list ${sk.map(T).join(" + ")} together.`,s:"All resumes"}}
+return{t:"I couldn't find this information in the uploaded resumes. Try asking about skills, comparisons, gaps, summaries or interview questions."}}
+go("dash");
+</script></body></html>
