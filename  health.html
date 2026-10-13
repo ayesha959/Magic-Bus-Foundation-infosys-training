@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free Health Camp Finder</title>
+<meta name="description" content="Find free health camps near you.">
+<style>
+:root{--p:#0b5cad;--s:#0f9d8a;--bg:#f5f7fa;--c:#fff;--t:#14202e;--m:#51606f;--b:#d5dde6;--r:#c62828;--ok:#1b7f3b;--w:#a15c00}
+[data-d=dark]{--p:#6db3ff;--s:#3ccfb8;--bg:#0e1620;--c:#17222f;--t:#eef3f8;--m:#a9b8c7;--b:#2c3c4e;--r:#ff8a80;--ok:#6fdc8c;--w:#ffc266}
+*{box-sizing:border-box}body{margin:0;font:18px/1.55 system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--t);padding-bottom:80px}
+a{color:var(--p)}h1,h2,h3{line-height:1.2;margin:.3em 0}
+header{background:var(--c);border-bottom:1px solid var(--b);position:sticky;top:0;z-index5;z-index:5}
+.bar{max-width:1100px;margin:auto;padding:10px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.logo{font-weight:800;font-size:1.15rem;color:var(--p);text-decoration:none;margin-right:auto}
+nav.top{display:none;gap:4px;flex-wrap:wrap}nav.top a{padding:8px 12px;border-radius:10px;text-decoration:none;color:var(--t);font-weight:600}
+nav.top a.on,nav.top a:hover{background:var(--p);color:#fff}
+@media(min-width:860px){nav.top{display:flex}nav.bot{display:none!important}body{padding-bottom:0}}
+nav.bot{position:fixed;bottom:0;left:0;right:0;background:var(--c);border-top:1px solid var(--b);display:flex;z-index:5}
+nav.bot a{flex:1;text-align:center;padding:8px 2px;font-size:.78rem;text-decoration:none;color:var(--m);min-height:56px}nav.bot a b{display:block;font-size:1.3rem}nav.bot a.on{color:var(--p);font-weight:700}
+main{max-width:1100px;margin:auto;padding:16px}
+button,.btn{font:inherit;font-weight:700;border:2px solid var(--p);background:var(--c);color:var(--p);border-radius:12px;padding:10px 16px;min-height:48px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+button.pr,.btn.pr{background:var(--p);color:#fff}[data-d=dark] button.pr,[data-d=dark] .btn.pr{color:#06121f}
+button.sm{min-height:40px;padding:6px 12px;font-size:.9rem}button.dg{border-color:var(--r);color:var(--r)}
+:focus-visible{outline:4px solid #ffb300;outline-offset:2px}
+input,select,textarea{font:inherit;width:100%;padding:11px;border:2px solid var(--b);border-radius:10px;background:var(--c);color:var(--t);min-height:48px}
+label{font-weight:600;display:block;margin:10px 0 4px}
+.hero{background:linear-gradient(135deg,var(--p),var(--s));color:#fff;border-radius:20px;padding:28px 18px}.hero h1{font-size:clamp(1.8rem,5vw,2.8rem)}
+.sbox{background:var(--c);color:var(--t);border-radius:16px;padding:14px;margin-top:16px;display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.sbox label{margin:0 0 2px;font-size:.9rem}
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:16px 0}
+.cats button{flex-direction:column;min-height:84px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(290px,1fr))}
+.card{background:var(--c);border:1px solid var(--b);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.card p{margin:0}.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.82rem;font-weight:700;border:1.5px solid}
+.g{color:var(--ok)}.y{color:var(--w)}.rd{color:var(--r)}
+.demo{background:#fff3cd;color:#5a4300;border-radius:10px;padding:8px 12px;font-size:.9rem;margin-bottom:12px}
+.panel{background:var(--c);border:1px solid var(--b);border-radius:18px;padding:16px;margin-bottom:14px}
+.filters{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.emerg{background:rgba(198,40,40,.1);border:2px solid var(--r);border-radius:14px;padding:10px 14px;color:var(--r);font-weight:700;margin:14px 0}
+.map{position:relative;height:420px;border-radius:18px;border:1px solid var(--b);overflow:hidden;background:linear-gradient(90deg,transparent 49%,#9fc3e6 49% 51%,transparent 51%),linear-gradient(0deg,transparent 60%,#bfe3d6 60% 63%,transparent 63%),#e4eef6}
+[data-d=dark] .map{background:#1b2a38}
+.pin{position:absolute;transform:translate(-50%,-100%);font-size:2rem;background:none;border:0;padding:0;min-height:44px;min-width:44px}
+.bars div{display:flex;align-items:center;gap:8px;margin:6px 0}.bars i{display:block;height:20px;background:var(--s);border-radius:6px}
+table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:8px;border-bottom:1px solid var(--b);font-size:.95rem}
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--ok);color:#fff;padding:12px 20px;border-radius:12px;z-index:9;font-weight:700}
+.err{color:var(--r);font-size:.9rem;margin:2px 0}
+#ai{position:fixed;right:14px;bottom:84px;z-index:6}@media(min-width:860px){#ai{bottom:20px}}
+#aib{width:340px;max-width:calc(100vw - 28px);max-height:70vh;overflow:auto;background:var(--c);border:2px solid var(--p);border-radius:16px;padding:12px;margin-bottom:8px}
+.msg{padding:8px 12px;border-radius:12px;margin:6px 0;background:var(--bg)}.msg.u{background:var(--p);color:#fff;margin-left:30px}
+footer{text-align:center;color:var(--m);padding:20px;font-size:.9rem}
+</style>
+</head>
+<body>
+<header><div class="bar">
+<a class="logo" href="#/">🏥 <span data-t="brand"></span></a>
+<nav class="top" id="topnav"></nav>
+<button class="sm" id="lang" aria-label="Language">தமிழ்</button>
+<button class="sm" id="dark" aria-label="Dark mode">🌙</button>
+</div></header>
+<main id="app" tabindex="-1"></main>
+<footer>Demo project • Sample data only • Medical services are provided by the respective organizers. <a href="#/privacy">Privacy</a> · <a href="#/terms">Terms</a> · <a href="#/contact">Contact</a></footer>
+<nav class="bot" id="botnav" aria-label="Main"></nav>
+<div id="ai"></div>
+<script>
+/* ===== Config / i18n ===== */
+const TX={en:{brand:"Free Health Camp Finder",home:"Home",search:"Search",saved:"Saved",my:"My Camps",profile:"Profile",map:"Map",organizer:"Organizer",admin:"Admin",about:"About",h1:"Find Free Health Camps Near You",sub:"Discover free medical check-ups, health screenings and community healthcare services.",find:"Find Health Camps",details:"View Details",register:"Register",dir:"Get Directions",save:"Save",unsave:"Saved ✓",free:"Free",open:"Registration Open",full:"Registration Full",closed:"Closed",cancel:"Cancelled",read:"🔊 Read Aloud",none:"No camps found. Try changing filters."},
+ta:{brand:"இலவச மருத்துவ முகாம் தேடல்",home:"முகப்பு",search:"தேடு",saved:"சேமித்தவை",my:"என் முகாம்கள்",profile:"சுயவிவரம்",map:"வரைபடம்",organizer:"ஏற்பாட்டாளர்",admin:"நிர்வாகி",about:"பற்றி",h1:"அருகிலுள்ள இலவச மருத்துவ முகாம்களைக் கண்டறியுங்கள்",sub:"இலவச பரிசோதனைகள், ஆரோக்கிய சோதனைகள் மற்றும் சமூக மருத்துவ சேவைகளைக் கண்டறியுங்கள்.",find:"முகாம்களைத் தேடு",details:"விவரங்கள்",register:"பதிவு செய்",dir:"வழி காட்டு",save:"சேமி",unsave:"சேமிக்கப்பட்டது ✓",free:"இலவசம்",open:"பதிவு திறந்துள்ளது",full:"இடங்கள் நிரம்பின",closed:"முடிந்தது",cancel:"ரத்து",read:"🔊 படித்துக் காட்டு",none:"முகாம்கள் இல்லை. வடிகட்டிகளை மாற்றவும்."}};
+const SPECS=["General Medicine","Dental","Eye Care","Cardiology","Women's Health","Child Health","Dermatology","Orthopedics","Diabetes","Blood Pressure","Mental Wellness","Blood Donation","Health Screening"];
+const ICON={"General Medicine":"🩺","Cardiology":"❤️","Eye Care":"👁️","Dental":"🦷","Women's Health":"👩","Child Health":"👶","Mental Wellness":"🧠","Blood Donation":"🩸","Orthopedics":"🦴","Health Screening":"🧪","Diabetes":"🧪","Blood Pressure":"❤️","Dermatology":"🩺"};
+const SERVICES=["Free Consultation","Free Blood Test","Free Eye Test","Free Medicine","Free Health Screening","Vaccination"];
+const day=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)};
+const mk=(id,name,org,sp,sv,d,st,en,area,pin,ph,slots,taken,x,y,km,rt,ver,walk)=>({id,name,org,spec:sp,services:sv,date:day(d),start:st,end:en,area,city:"Chennai",pin,addr:`${area}, Chennai ${pin}`,phone:ph,email:"info@demo-camp.example",slots,taken,x,y,km,rating:rt,verified:ver,walkin:walk,status:ver?"verified":"pending",cancelled:false,elig:"Open to all. Children under 12 with a guardian.",req:"Valid ID if required by the organizer.",desc:"Sample camp for demonstration. Not real."});
+const SEED=[
+mk(1,"Free General Health Camp","Apollo Community Trust",["General Medicine"],["Free Consultation","Free Health Screening"],1,"09:00","14:00","T. Nagar","600017","+914412345601",120,84,34,46,2.1,4.6,1,1),
+mk(2,"Free Eye Screening Camp","Sankara Vision Foundation",["Eye Care"],["Free Eye Test","Free Consultation"],2,"10:00","15:00","Adyar","600020","+914412345602",80,60,58,74,5.4,4.8,1,0),
+mk(3,"Women's Wellness Camp","Asha Women NGO",["Women's Health"],["Free Consultation","Free Health Screening"],3,"09:30","13:30","Anna Nagar","600040","+914412345603",60,31,22,24,8.9,4.5,1,0),
+mk(4,"Diabetes Screening Camp","Madras Diabetes Care",["Diabetes"],["Free Blood Test","Free Consultation"],0,"08:00","12:00","Velachery","600042","+914412345604",100,100,48,86,7.3,4.4,1,1),
+mk(5,"Dental Check-up Camp","Smile Bright Clinic",["Dental"],["Free Consultation"],5,"10:00","16:00","Tambaram","600045","+914412345605",70,22,30,92,18,4.3,0,1),
+mk(6,"Children's Health Camp","Little Hearts NGO",["Child Health"],["Vaccination","Free Consultation"],4,"09:00","13:00","Perambur","600011","+914412345606",90,40,62,20,10.5,4.7,1,0),
+mk(7,"Blood Pressure Screening Camp","Rotary Chennai",["Blood Pressure","Cardiology"],["Free Health Screening"],6,"07:00","11:00","Mylapore","600004","+914412345607",150,70,70,52,3.8,4.2,1,1),
+mk(8,"Senior Citizen Health Camp","Elder Care Society",["General Medicine","Orthopedics"],["Free Consultation","Free Medicine"],8,"09:00","13:00","Besant Nagar","600090","+914412345608",75,30,80,82,9.2,4.9,1,0),
+mk(9,"Free Blood Test Camp","Lifeline Labs Trust",["Health Screening"],["Free Blood Test"],10,"08:00","12:00","Guindy","600032","+914412345609",110,15,40,64,6.1,4.1,0,1),
+mk(10,"Community Medical Camp","Chennai Lions Club",["General Medicine","Dermatology"],["Free Consultation","Free Medicine","Vaccination"],20,"09:00","17:00","Ambattur","600053","+914412345610",200,45,16,40,14.7,4.4,1,1)];
+/* ===== State ===== */
+let S={saved:[],regs:[],camps:SEED,role:"user",lang:"en",dark:false,reports:[],user:{name:"Demo User",mobile:"9876543210",email:"demo@example.com"}};
+try{const l=JSON.parse(localStorage.getItem("hcf")||"null");if(l)S={...S,...l}}catch(e){}
+const save=()=>{try{localStorage.setItem("hcf",JSON.stringify(S))}catch(e){}};
+const F={q:"",spec:"",date:"",km:"",svc:"",av:"",view:"list"};
+const t=k=>(TX[S.lang][k]||TX.en[k]||k);
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const camp=id=>S.camps.find(c=>c.id==id);
+const left=c=>c.slots-c.taken;
+const fmtD=d=>new Date(d+"T00:00").toLocaleDateString(S.lang=="ta"?"ta-IN":"en-IN",{weekday:"short",day:"numeric",month:"short"});
+const tm=x=>{let[h,m]=x.split(":");return `${h%12||12}:${m} ${h<12?"AM":"PM"}`};
+function status(c){if(c.cancelled)return["rd",t("cancel")];if(c.date<day(0))return["y",t("closed")];if(left(c)<=0)return["y",t("full")];return["g","🟢 "+t("open")]}
+function toast(m){const d=document.createElement("div");d.className="toast";d.setAttribute("role","status");d.textContent=m;document.body.append(d);setTimeout(()=>d.remove(),2600)}
+const stars=r=>"⭐".repeat(Math.round(r))+` ${r}`;
+/* ===== Components ===== */
+function cardH(c){const[cl,lb]=status(c);const sv=S.saved.includes(c.id);
+return `<article class="card"><div><span class="badge ${cl}">${lb}</span> ${c.verified?'<span class="badge g">✔ Verified</span>':""} <span class="badge y">DEMO</span></div>
+<h3>${ICON[c.spec[0]]||"🩺"} ${esc(c.name)}</h3>
+<p>📍 ${esc(c.area)}, ${esc(c.city)} · ${c.km} km</p><p>📅 ${fmtD(c.date)} · ⏰ ${tm(c.start)}–${tm(c.end)}</p>
+<p>🩺 ${c.spec.join(", ")}</p><p>💰 ${t("free")} · 👨‍⚕️ Doctors available · ${stars(c.rating)}</p>
+<div class="row"><a class="btn pr sm" href="#/camp/${c.id}">${t("details")}</a><a class="btn sm" href="#/register/${c.id}">${t("register")}</a>
+<a class="btn sm" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.name+" "+c.addr)}">📍 ${t("dir")}</a>
+<button class="sm" data-save="${c.id}" aria-pressed="${sv}">❤️ ${t(sv?"unsave":"save")}</button></div></article>`}
+function filt(){const q=F.q.toLowerCase();return S.camps.filter(c=>{
+if(c.status=="rejected"||(c.status=="pending"&&S.role=="user"&&0))return false;
+if(q&&!(`${c.name} ${c.org} ${c.area} ${c.city} ${c.pin} ${c.spec.join(" ")} ${c.services.join(" ")}`.toLowerCase().includes(q)))return false;
+if(F.spec&&!c.spec.includes(F.spec))return false;if(F.svc&&!c.services.includes(F.svc))return false;
+if(F.km&&c.km>+F.km)return false;
+if(F.av=="open"&&(left(c)<=0||c.cancelled))return false;if(F.av=="walk"&&!c.walkin)return false;
+const d=(new Date(c.date)-new Date(day(0)))/864e5;
+if(F.date=="today"&&d!=0)return false;if(F.date=="tomorrow"&&d!=1)return false;if(F.date=="week"&&(d<0||d>7))return false;if(F.date=="month"&&(d<0||d>31))return false;
+return true}).sort((a,b)=>a.date.localeCompare(b.date))}
+const opts=(a,sel)=>a.map(x=>`<option ${x==sel?"selected":""}>${x}</option>`).join("");
+function countdown(c){const ms=new Date(c.date+"T"+c.start)-Date.now();if(ms<0)return"Started / ended";const d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5);return `${d}d ${h}h to go`}
+/* ===== Pages ===== */
+const P={};
+P.home=()=>`<section class="hero"><h1>${t("h1")}</h1><p>${t("sub")}</p>
+<form class="sbox" id="hf"><div><label for="hc">City / Area / Pincode</label><input id="hc" list="sug" placeholder="e.g. Chennai, Adyar, 600020" autocomplete="off"></div>
+<div><label for="hs">Health specialty</label><select id="hs"><option value="">Any</option>${opts(SPECS)}</select></div>
+<div style="align-self:end"><button class="pr" style="width:100%">🔍 ${t("find")}</button></div></form></section>
+<datalist id="sug">${[...new Set(S.camps.flatMap(c=>[c.city,c.area,c.pin]))].map(x=>`<option>${x}</option>`).join("")}${SPECS.map(x=>`<option>${x}</option>`).join("")}</datalist>
+<h2>Quick categories</h2><div class="cats">${["General Medicine","Cardiology","Eye Care","Dental","Women's Health","Child Health","Mental Wellness","Blood Donation","Orthopedics","Health Screening"].map(s=>`<button data-cat="${s}"><span style="font-size:1.8rem">${ICON[s]}</span>${s}</button>`).join("")}</div>
+<div class="emerg">🚨 In a medical emergency call 108 (ambulance) immediately. Camps are not for emergencies.</div>
+<h2>Upcoming camps</h2><div class="grid">${S.camps.filter(c=>c.status!="rejected"&&!c.cancelled&&c.date>=day(0)).slice(0,6).map(cardH).join("")}</div>
+<div class="panel" style="margin-top:16px"><h3>How it works</h3><p>1️⃣ Enter location → 2️⃣ Pick a service → 3️⃣ Find a camp → 4️⃣ View details → 5️⃣ Register → 6️⃣ Get confirmation</p></div>`;
+P.search=()=>{const r=filt();return `<h1>🔍 Find Health Camps</h1><div class="demo">⚠️ Sample/demo data — not real medical information.</div>
+<div class="panel"><label for="q">Search location, camp, hospital or specialty</label><input id="q" list="sug" value="${esc(F.q)}" placeholder="Type to search…">
+<datalist id="sug">${SPECS.map(x=>`<option>${x}</option>`).join("")}${[...new Set(S.camps.flatMap(c=>[c.area,c.org]))].map(x=>`<option>${esc(x)}</option>`).join("")}</datalist>
+<div class="filters"><div><label for="fd">Date</label><select id="fd"><option value="">Any</option><option value="today" ${F.date=="today"?"selected":""}>Today</option><option value="tomorrow" ${F.date=="tomorrow"?"selected":""}>Tomorrow</option><option value="week" ${F.date=="week"?"selected":""}>This Week</option><option value="month" ${F.date=="month"?"selected":""}>This Month</option></select></div>
+<div><label for="fk">Distance</label><select id="fk"><option value="">Any</option>${[2,5,10,25].map(k=>`<option value="${k}" ${F.km==k?"selected":""}>Within ${k} km</option>`).join("")}</select></div>
+<div><label for="fs">Specialty</label><select id="fs"><option value="">Any</option>${opts(SPECS,F.spec)}</select></div>
+<div><label for="fv">Services</label><select id="fv"><option value="">Any</option>${opts(SERVICES,F.svc)}</select></div>
+<div><label for="fa">Availability</label><select id="fa"><option value="">Any</option><option value="open" ${F.av=="open"?"selected":""}>Registration Open</option><option value="walk" ${F.av=="walk"?"selected":""}>Walk-in Available</option></select></div></div>
+<div class="row"><button class="${F.view=="list"?"pr":""}" data-view="list">List View</button><button class="${F.view=="map"?"pr":""}" data-view="map">Map View</button><button data-clear>Clear filters</button></div></div>
+<p><b>${r.length}</b> camps found</p>${F.view=="map"?mapH(r):r.length?`<div class="grid">${r.map(cardH).join("")}</div>`:`<div class="panel">😕 ${t("none")}</div>`}`};
+function mapH(r){return `<div class="map" role="application" aria-label="Map placeholder (integrate Google Maps/Leaflet in initMap)">${r.map(c=>`<button class="pin" style="left:${c.x}%;top:${c.y}%" data-pin="${c.id}" aria-label="${esc(c.name)}">📍</button>`).join("")}<span style="position:absolute;left:8px;bottom:6px;font-size:.8rem;color:var(--m)">Map placeholder — connect a map API later</span></div><div id="pinbox" class="panel" style="margin-top:10px">Tap a marker to see details.</div>`}
+P.map=()=>{F.view="map";return P.search()};
+P.camp=id=>{const c=camp(id);if(!c)return `<div class="panel">Camp not found. <a href="#/search">Back</a></div>`;const[cl,lb]=status(c);
+return `<a href="#/search">← Back</a><div class="demo">⚠️ Sample/demo data.</div><div class="panel"><span class="badge ${cl}">${lb}</span> ${c.verified?'<span class="badge g">✔ Verified Organizer</span>':'<span class="badge y">Pending verification</span>'}
+<h1>${ICON[c.spec[0]]} ${esc(c.name)}</h1><p>${esc(c.desc)} ${stars(c.rating)}</p>
+<table><tr><th>Organization</th><td>${esc(c.org)}</td></tr><tr><th>Date</th><td>${fmtD(c.date)}</td></tr><tr><th>Time</th><td>${tm(c.start)} – ${tm(c.end)}</td></tr><tr><th>Address</th><td>${esc(c.addr)}</td></tr>
+<tr><th>Contact</th><td><a href="tel:${c.phone}">${c.phone}</a> · ${esc(c.email)}</td></tr><tr><th>Specialties</th><td>${c.spec.join(", ")}</td></tr><tr><th>Services</th><td>${c.services.join(", ")}</td></tr>
+<tr><th>Eligibility</th><td>${esc(c.elig)}</td></tr><tr><th>Requirements</th><td>${esc(c.req)}</td></tr><tr><th>Slots left</th><td>${left(c)} of ${c.slots}</td></tr>
+<tr><th>Deadline</th><td>${fmtD(c.date)} (day of camp)</td></tr><tr><th>Countdown</th><td>🕐 ${countdown(c)}</td></tr></table>
+<div class="emerg">ℹ️ Please carry a valid ID if required by the organizer.</div>
+<p style="color:var(--m)">This platform provides information about health camps. Medical services are provided by the respective organizers.</p>
+<div class="row"><a class="btn pr" href="#/register/${c.id}">📝 Register for Camp</a><a class="btn" href="tel:${c.phone}">📞 Call Organizer</a>
+<a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.addr)}">📍 ${t("dir")}</a>
+<button data-share="${c.id}">📤 Share</button><a class="btn" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(c.name+" on "+c.date+" at "+c.addr+" "+location.href)}">💬 WhatsApp</a>
+<button data-read="${c.id}">${t("read")}</button><button data-save="${c.id}">❤️ ${t(S.saved.includes(c.id)?"unsave":"save")}</button><a class="btn dg" href="#/report/${c.id}">🚨 Report this camp</a></div></div>`};
+P.register=id=>{const c=camp(id);if(!c)return P.camp(id);
+if(c.cancelled||left(c)<=0||c.date<day(0))return `<div class="panel">Registration is not available for this camp. <a href="#/search">Find others</a></div>`;
+return `<a href="#/camp/${id}">← Back</a><h1>📝 Register: ${esc(c.name)}</h1><form class="panel" id="rf" novalidate>
+<label for="n">Full Name</label><input id="n" value="${esc(S.user.name)}" autocomplete="name"><div class="err" id="e-n"></div>
+<label for="a">Age</label><input id="a" type="number" inputmode="numeric"><div class="err" id="e-a"></div>
+<label for="g">Gender</label><select id="g"><option>Female</option><option>Male</option><option>Other</option></select>
+<label for="m">Mobile Number (10 digits)</label><input id="m" inputmode="tel" value="${esc(S.user.mobile)}" autocomplete="tel"><div class="err" id="e-m"></div>
+<label for="e">Email</label><input id="e" type="email" value="${esc(S.user.email)}"><div class="err" id="e-e"></div>
+<label for="pd">Preferred Date</label><input id="pd" value="${c.date}" readonly>
+<label for="sv">Health Service Required</label><select id="sv">${opts(c.services)}</select>
+<label for="np">Number of People</label><input id="np" type="number" min="1" max="${Math.min(5,left(c))}" value="1"><div class="err" id="e-np"></div>
+<label for="ec">Emergency Contact (10 digits)</label><input id="ec" inputmode="tel"><div class="err" id="e-ec"></div>
+<label style="display:flex;gap:10px;font-weight:400"><input type="checkbox" id="ag" style="width:28px;min-height:28px"> I agree to share my registration details with the camp organizer.</label><div class="err" id="e-ag"></div>
+<button class="pr" style="margin-top:12px;width:100%">Confirm Registration</button></form>`};
+P.confirm=id=>{const r=S.regs.find(x=>x.rid==id);if(!r)return P.my();const c=camp(r.cid);
+return `<div class="panel"><h1>✅ Registration Successful</h1><table><tr><th>Camp</th><td>${esc(c.name)}</td></tr><tr><th>Registration ID</th><td><b>${r.rid}</b></td></tr><tr><th>Date</th><td>${fmtD(c.date)}</td></tr><tr><th>Time</th><td>${tm(c.start)}–${tm(c.end)}</td></tr><tr><th>Location</th><td>${esc(c.addr)}</td></tr></table>
+<div class="row"><button class="pr" data-dl="${r.rid}">⬇ Download Registration Confirmation</button><a class="btn" href="#/my">My Registrations</a></div></div>`};
+P.saved=()=>{const l=S.camps.filter(c=>S.saved.includes(c.id));return `<h1>❤️ ${t("saved")} Camps</h1>${l.length?`<div class="grid">${l.map(cardH).join("")}</div>`:`<div class="panel">No saved camps yet. <a href="#/search">Find camps</a></div>`}`};
+P.my=()=>{const rs=S.regs;const up=rs.filter(r=>camp(r.cid)?.date>=day(0)),past=rs.filter(r=>camp(r.cid)?.date<day(0));
+const row=r=>{const c=camp(r.cid);return `<tr><td>${esc(c.name)}<br><small>${r.rid}</small></td><td>${fmtD(c.date)}</td><td><a href="#/confirm/${r.rid}">View</a> <button class="sm dg" data-cancelreg="${r.rid}">Cancel</button></td></tr>`};
+return `<h1>📅 My Registrations</h1><h2>Upcoming</h2>${up.length?`<div class="panel"><table>${up.map(row).join("")}</table></div>`:`<div class="panel">No upcoming registrations.</div>`}<h2>Past</h2>${past.length?`<div class="panel"><table>${past.map(row).join("")}</table></div>`:`<div class="panel">No past camps.</div>`}`};
+P.profile=()=>`<h1>👤 Profile</h1><form class="panel" id="pf"><label for="pn">Name</label><input id="pn" value="${esc(S.user.name)}"><label for="pm">Mobile</label><input id="pm" value="${esc(S.user.mobile)}"><label for="pe">Email</label><input id="pe" value="${esc(S.user.email)}">
+<button class="pr" style="margin-top:10px">Save profile</button></form>
+<div class="panel"><h3>Summary</h3><p>❤️ Saved: ${S.saved.length} · 📅 Registered: ${S.regs.length}</p><p><a href="#/notifications">🔔 View notifications</a></p>
+<label for="role">Demo role (replace with real authentication)</label><select id="role">${["user","organizer","admin"].map(r=>`<option ${S.role==r?"selected":""}>${r}</option>`).join("")}</select><p style="color:var(--m);font-size:.9rem">Your data is stored only in this browser and never shown publicly.</p><button class="dg" data-reset>Reset demo data</button></div>`;
+P.notifications=()=>{const n=[{i:"🔔",m:"Your Eye Care Camp is tomorrow at 10:00 AM.",s:"Reminder"},{i:"📅",m:"Diabetes Screening Camp is today — walk-ins welcome.",s:"Date approaching"},{i:"⚠️",m:"Dental Check-up Camp schedule changed to 10:00 AM.",s:"Schedule change"},{i:"❌",m:"A camp you saved was cancelled (sample).",s:"Cancellation"},...S.regs.map(r=>({i:"✅",m:`Registration confirmed: ${camp(r.cid).name} (${r.rid})`,s:"Confirmation"}))];
+return `<h1>🔔 Notifications</h1>${n.map(x=>`<div class="panel"><b>${x.i} ${x.s}</b><br>${esc(x.m)}</div>`).join("")}`};
+P.organizer=()=>S.role=="user"?gate("organizer"):`<h1>🏢 Organizer Dashboard</h1><a class="btn pr" href="#/add">➕ Add Health Camp</a><div class="panel" style="margin-top:12px"><table><tr><th>Camp</th><th>Regs</th><th>Slots</th><th></th></tr>${S.camps.filter(c=>c.id>=100||S.role=="admin"||c.id<=3).map(c=>`<tr><td>${esc(c.name)}<br><span class="badge ${c.cancelled?"rd":c.status=="verified"?"g":"y"}">${c.cancelled?"Cancelled":c.status}</span></td><td>${c.taken}</td><td><input type="number" aria-label="Slots" style="width:80px;min-height:40px" value="${c.slots}" data-slots="${c.id}"></td><td><button class="sm dg" data-cancelcamp="${c.id}">Cancel</button></td></tr>`).join("")}</table></div>`;
+const gate=r=>`<div class="panel"><h2>🔒 Access restricted</h2><p>Switch your demo role to "${r}" in <a href="#/profile">Profile</a>. In production this is enforced by server-side authentication.</p></div>`;
+P.add=()=>S.role=="user"?gate("organizer"):`<h1>➕ Add Health Camp</h1><form class="panel" id="af" novalidate>
+${[["an","Camp Name"],["ao","Organization Name"],["ah","Hospital/Clinic"],["aa","Address"],["ac","City"],["ap","Pincode"],["aph","Contact Number"]].map(([i,l])=>`<label for="${i}">${l}</label><input id="${i}">`).join("")}
+<label for="ad">Description</label><textarea id="ad"></textarea><label for="as">Specialty</label><select id="as">${opts(SPECS)}</select><label for="av">Services</label><select id="av">${opts(SERVICES)}</select>
+<label for="adt">Date</label><input id="adt" type="date" min="${day(0)}"><label for="ast">Start Time</label><input id="ast" type="time" value="09:00"><label for="aen">End Time</label><input id="aen" type="time" value="13:00">
+<label for="al">Registration Limit</label><input id="al" type="number" value="100"><label for="at">Registration Type</label><select id="at"><option>Registration required</option><option>Walk-in</option></select><label for="aim">Image/Poster</label><input id="aim" type="file" accept="image/*">
+<div class="err" id="e-af"></div><button class="pr" style="margin-top:12px;width:100%">Publish Health Camp</button><p style="color:var(--m);font-size:.9rem">New camps go to admin for approval.</p></form>`;
+P.admin=()=>{if(S.role!="admin")return gate("admin");const C=S.camps;const cnt=f=>C.filter(f).length;
+const by={};C.forEach(c=>by[c.city]=(by[c.city]||0)+1);const sp={};C.forEach(c=>c.spec.forEach(s=>sp[s]=(sp[s]||0)+c.taken));const mx=Math.max(...Object.values(sp));
+const bars=(o,m)=>`<div class="bars">${Object.entries(o).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([k,v])=>`<div><span style="width:130px;font-size:.85rem">${k}</span><i style="width:${v/m*100}%;min-width:4px"></i><b>${v}</b></div>`).join("")}</div>`;
+return `<h1>👨‍💼 Admin Dashboard</h1><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">${[["Total Camps",C.length],["Upcoming",cnt(c=>c.date>=day(0)&&!c.cancelled)],["Registered Users",C.reduce((a,c)=>a+c.taken,0)+S.regs.length],["Organizations",new Set(C.map(c=>c.org)).size],["Pending",cnt(c=>c.status=="pending")],["Cancelled",cnt(c=>c.cancelled)]].map(([l,v])=>`<div class="card"><small>${l}</small><h2>${v}</h2></div>`).join("")}</div>
+<div class="panel" style="margin-top:14px"><h3>Camps</h3><div style="overflow-x:auto"><table>${C.map(c=>`<tr><td>${esc(c.name)}<br><span class="badge ${c.status=="verified"?"g":c.status=="pending"?"y":"rd"}">${c.status=="verified"?"🟢 Verified":c.status=="pending"?"🟡 Pending":"🔴 Rejected"}</span></td><td><button class="sm" data-st="${c.id}:verified">Approve</button> <button class="sm dg" data-st="${c.id}:rejected">Reject</button> <button class="sm dg" data-rm="${c.id}">Remove</button></td></tr>`).join("")}</table></div></div>
+<div class="panel"><h3>📊 Analytics</h3><h4>Camps by city</h4>${bars(by,C.length)}<h4>Registrations by specialty</h4>${bars(sp,mx)}<h4>Monthly registrations (sample)</h4><div class="bars">${["May","Jun","Jul","Aug","Sep","Oct"].map((m,i)=>`<div><span style="width:40px">${m}</span><i style="width:${[30,42,55,48,70,85][i]}%"></i></div>`).join("")}</div></div>
+<div class="panel"><h3>🚨 Reports (${S.reports.length})</h3>${S.reports.map(r=>`<p>${esc(r.reason)} — ${esc(camp(r.cid)?.name||"")}: ${esc(r.note)}</p>`).join("")||"No reports."}</div>`};
+P.report=id=>`<h1>🚨 Report a Problem</h1><p>Help us keep health information accurate.</p><form class="panel" id="rpf"><label for="rc">Camp</label><select id="rc">${S.camps.map(c=>`<option value="${c.id}" ${c.id==id?"selected":""}>${esc(c.name)}</option>`).join("")}</select>
+<label for="rr">Issue</label><select id="rr">${["Incorrect location","Wrong date","Fake camp","Incorrect contact information","Camp cancelled","Other"].map(x=>`<option>${x}</option>`).join("")}</select><label for="rn">Details</label><textarea id="rn"></textarea><button class="pr" style="margin-top:10px">Submit report</button></form>`;
+P.about=()=>`<h1>About</h1><div class="panel"><p>Free Health Camp Finder connects people with free and low-cost medical camps run by hospitals and NGOs. This is a demo project with sample data. It does not diagnose or give medical advice.</p></div>`;
+P.contact=()=>`<h1>Contact</h1><div class="panel"><p>📧 hello@healthcamp.example<br>📞 +91 44 0000 0000<br>(demo details)</p></div>`;
+P.privacy=()=>`<h1>Privacy Policy</h1><div class="panel"><p>Registration details are shared only with the camp organizer you register with. Personal information is never shown publicly. In this demo, data stays in your browser.</p></div>`;
+P.terms=()=>`<h1>Terms</h1><div class="panel"><p>This platform only lists information. Medical services are provided by the respective organizers. Not for emergencies — call 108.</p></div>`;
+/* ===== Router ===== */
+const NAV=[["home","/","🏠"],["search","/search","🔍"],["saved","/saved","❤️"],["my","/my","📅"],["profile","/profile","👤"]];
+const TOP=[...NAV.slice(0,2),["map","/map","🗺️"],...NAV.slice(2),["organizer","/organizer","🏢"],["admin","/admin","📊"],["about","/about","ℹ️"]];
+function render(){const h=(location.hash||"#/").slice(1);const[,pg="",arg]=h.split("/");
+const name=pg||"home";const fn=P[name]||P.home;
+document.documentElement.lang=S.lang;document.documentElement.dataset.d=S.dark?"dark":"light";
+$("#app").innerHTML=fn(arg);document.title=t("brand");
+const on=l=>"/"+(pg)==l||(!pg&&l=="/");
+$("#topnav").innerHTML=TOP.map(([k,l])=>`<a href="#${l}" class="${on(l)?"on":""}">${t(k)}</a>`).join("");
+$("#botnav").innerHTML=NAV.map(([k,l,i])=>`<a href="#${l}" class="${on(l)?"on":""}"><b>${i}</b>${t(k)}</a>`).join("");
+$("#lang").textContent=S.lang=="en"?"தமிழ்":"English";$("#dark").textContent=S.dark?"☀️":"🌙";
+window.scrollTo(0,0);}
+window.addEventListener("hashchange",render);
+$("#lang").onclick=()=>{S.lang=S.lang=="en"?"ta":"en";save();render()};
+$("#dark").onclick=()=>{S.dark=!S.dark;save();render()};
+/* ===== Events ===== */
+const err=(k,m)=>{const e=$("#e-"+k);if(e)e.textContent=m||"";return !!m};
+document.addEventListener("click",e=>{const d=e.target.closest("[data-save],[data-cat],[data-view],[data-clear],[data-pin],[data-share],[data-read],[data-dl],[data-cancelreg],[data-cancelcamp],[data-st],[data-rm],[data-reset]");if(!d)return;const D=d.dataset;
+if(D.save){const i=+D.save;S.saved=S.saved.includes(i)?S.saved.filter(x=>x!=i):[...S.saved,i];save();render();toast(S.saved.includes(i)?"Camp saved":"Removed from saved")}
+if(D.cat){F.spec=D.cat;location.hash="#/search"}
+if(D.view){F.view=D.view;render()}
+if(D.clear!==undefined){Object.assign(F,{q:"",spec:"",date:"",km:"",svc:"",av:""});render()}
+if(D.pin){const c=camp(D.pin);$("#pinbox").innerHTML=`<b>${esc(c.name)}</b><br>📅 ${fmtD(c.date)} · 🩺 ${c.spec.join(", ")} · 📏 ${c.km} km<br><a class="btn pr sm" href="#/camp/${c.id}">${t("details")}</a>`}
+if(D.share){const c=camp(D.share),u=location.href;navigator.share?navigator.share({title:c.name,text:c.name+" – free health camp",url:u}).catch(()=>{}):navigator.clipboard?.writeText(u).then(()=>toast("Link copied"))}
+if(D.read){const c=camp(D.read);if(!("speechSynthesis"in window))return toast("Read aloud not supported");speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(`${c.name}. By ${c.org}. On ${fmtD(c.date)} from ${tm(c.start)} to ${tm(c.end)}. At ${c.addr}. Please carry a valid ID if required.`);u.lang=S.lang=="ta"?"ta-IN":"en-IN";speechSynthesis.speak(u)}
+if(D.dl){const r=S.regs.find(x=>x.rid==D.dl),c=camp(r.cid);const txt=`REGISTRATION CONFIRMATION (DEMO)\nID: ${r.rid}\nCamp: ${c.name}\nName: ${r.name}\nPeople: ${r.np}\nDate: ${c.date}\nTime: ${tm(c.start)}-${tm(c.end)}\nLocation: ${c.addr}\nCarry a valid ID if required.`;const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([txt],{type:"text/plain"}));a.download=r.rid+".txt";a.click()}
+if(D.cancelreg){const r=S.regs.find(x=>x.rid==D.cancelreg);camp(r.cid).taken-=r.np;S.regs=S.regs.filter(x=>x!=r);save();render();toast("Registration cancelled")}
+if(D.cancelcamp){camp(D.cancelcamp).cancelled=true;save();render();toast("Camp cancelled")}
+if(D.st){const[i,s]=D.st.split(":");camp(i).status=s;if(s=="verified")camp(i).verified=true;save();render()}
+if(D.rm){if(confirm("Remove this camp?")){S.camps=S.camps.filter(c=>c.id!=D.rm);save();render()}}
+if(D.reset!==undefined){if(confirm("Reset all demo data?")){localStorage.removeItem("hcf");location.reload()}}});
+document.addEventListener("input",e=>{const i=e.target.id;
+if(i=="q"){F.q=e.target.value;clearTimeout(window._t);window._t=setTimeout(()=>{const p=e.target.selectionStart;render();const q=$("#q");q.focus();q.setSelectionRange(p,p)},250)}});
+document.addEventListener("change",e=>{const i=e.target.id,v=e.target.value,m={fd:"date",fk:"km",fs:"spec",fv:"svc",fa:"av"};
+if(m[i]){F[m[i]]=v;render()}
+if(i=="role"){S.role=v;save();toast("Role: "+v)}
+if(e.target.dataset.slots){camp(e.target.dataset.slots).slots=+v;save();toast("Slots updated")}});
+document.addEventListener("submit",e=>{e.preventDefault();const f=e.target.id,g=i=>$("#"+i)?.value.trim();
+if(f=="hf"){F.q=g("hc");F.spec=g("hs");location.hash="#/search"}
+if(f=="pf"){S.user={name:g("pn"),mobile:g("pm"),email:g("pe")};save();toast("Profile saved")}
+if(f=="rf"){const id=+location.hash.split("/")[2],c=camp(id);let bad=0;
+bad|=err("n",g("n").length<3?"Enter your full name":"");bad|=err("a",!(g("a")>0&&g("a")<120)?"Enter a valid age":"");
+bad|=err("m",!/^[6-9]\d{9}$/.test(g("m"))?"Enter a valid 10-digit mobile number":"");bad|=err("e",!/^\S+@\S+\.\S+$/.test(g("e"))?"Enter a valid email":"");
+const np=+g("np");bad|=err("np",!(np>=1&&np<=left(c))?`Choose 1 to ${left(c)}`:"");bad|=err("ec",!/^[6-9]\d{9}$/.test(g("ec"))?"Enter a valid emergency contact":"");bad|=err("ag",!$("#ag").checked?"Please accept to continue":"");
+if(!bad&&S.regs.some(r=>r.cid==id&&r.mobile==g("m")))bad=err("m","This mobile number is already registered for this camp");
+if(bad)return $(".err:not(:empty)")?.scrollIntoView({block:"center"});
+const rid="HC"+Date.now().toString(36).toUpperCase();S.regs.push({rid,cid:id,name:g("n"),mobile:g("m"),np});c.taken+=np;S.user={name:g("n"),mobile:g("m"),email:g("e")};save();location.hash="#/confirm/"+rid;toast("Registered!")}
+if(f=="af"){const n=["an","ao","ah","aa","ac","ap","aph","adt"].some(i=>!g(i));if(n||!/^\d{6}$/.test(g("ap"))||!/^[6-9]\d{9}$/.test(g("aph")))return err("af","Fill all fields. Pincode: 6 digits. Contact: 10-digit mobile.");
+const c=mk(Date.now(),g("an"),g("ao"),[g("as")],[g("av")],0,g("ast"),g("aen"),g("aa"),g("ap"),g("aph"),+g("al")||50,0,50,50,5,0,0,g("at")=="Walk-in");c.city=g("ac");c.addr=`${g("aa")}, ${g("ac")} ${g("ap")}`;c.date=g("adt");c.desc=g("ad")||"New camp";c.id=100+S.camps.length;S.camps.push(c);save();location.hash="#/organizer";toast("Submitted for admin approval")}
+if(f=="rpf"){S.reports.push({cid:+g("rc"),reason:g("rr"),note:g("rn")});save();toast("Thank you — report submitted");location.hash="#/"}});
+/* ===== AI assistant (rule-based; swap for an LLM API later) ===== */
+(function(){const el=$("#ai");el.innerHTML=`<div id="aib" hidden role="dialog" aria-label="Health Camp Assistant"><b>🤖 Camp Assistant</b><div id="aim"><div class="msg">Hi! I help you find camps — I can't diagnose or give medical advice. Try: "free eye check-up in Chennai this weekend".</div></div><form id="aif" style="display:flex;gap:6px;margin-top:8px"><input id="aiq" aria-label="Ask" placeholder="What camp do you need?"><button class="pr sm">Go</button></form></div><button class="pr" id="aibt" aria-expanded="false">🤖 Assistant</button>`;
+$("#aibt").onclick=()=>{const b=$("#aib");b.hidden=!b.hidden;$("#aibt").setAttribute("aria-expanded",!b.hidden)};
+$("#aif").onsubmit=e=>{e.preventDefault();const q=$("#aiq").value.trim();if(!q)return;$("#aiq").value="";const L=q.toLowerCase();
+const add=h=>{$("#aim").insertAdjacentHTML("beforeend",h);$("#aib").scrollTop=1e5};add(`<div class="msg u">${esc(q)}</div>`);
+if(/pain|diagnos|medicine for|treatment|disease|symptom/.test(L)&&!/camp/.test(L))return add(`<div class="msg">I can't give medical advice. Please consult a doctor — or tell me which kind of camp you'd like to find.</div>`);
+const kw={"Eye Care":/eye|vision/,"Dental":/dental|teeth|tooth/,"Diabetes":/diabet|sugar/,"Women's Health":/women|woman/,"Child Health":/child|kid|baby/,"Blood Pressure":/pressure|bp/,"Cardiology":/heart|cardio/,"General Medicine":/general|check-?up|senior|elder/,"Health Screening":/blood test|screening/};
+const sp=Object.keys(kw).find(k=>kw[k].test(L));const dt=/today/.test(L)?0:/tomorrow/.test(L)?1:null;const wk=/weekend/.test(L);
+const city=S.camps.some(c=>L.includes(c.city.toLowerCase())||L.includes(c.area.toLowerCase()));
+if(!sp){return add(`<div class="msg">Which service do you need (eye, dental, diabetes, women's health…)? And your area and preferred date?</div>`)}
+let r=S.camps.filter(c=>!c.cancelled&&c.status!="rejected"&&c.date>=day(0)&&c.spec.includes(sp)||(!c.cancelled&&c.services.some(s=>sp=="Eye Care"&&s=="Free Eye Test")&&c.date>=day(0)));
+if(dt!==null)r=r.filter(c=>c.date==day(dt));if(wk)r=r.filter(c=>[0,6].includes(new Date(c.date+"T00:00").getDay()));
+add(r.length?`<div class="msg">Here are ${sp} camps matching your request${city?"":" (showing Chennai — more cities coming)"}:</div>`+r.slice(0,3).map(c=>`<div class="msg"><b>${esc(c.name)}</b><br>📅 ${fmtD(c.date)} · 📍 ${esc(c.area)}<br><a href="#/camp/${c.id}">View details</a></div>`).join(""):`<div class="msg">No exact match. Try another date or a wider distance — or <a href="#/search">browse all camps</a>.</div>`)}})();
+render();
+</script>
+</body>
+</html>
